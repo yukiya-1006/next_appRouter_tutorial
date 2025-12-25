@@ -4,7 +4,11 @@ import { invoices, customers, revenue, users } from "../lib/placeholder-data";
 
 export const runtime = "nodejs";
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+if (!process.env.POSTGRES_URL) {
+  throw new Error("POSTGRES_URL is not defined or is invalid");
+}
+
+const sql = postgres(process.env.POSTGRES_URL, { ssl: "require" });
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;

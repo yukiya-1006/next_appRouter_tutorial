@@ -1,0 +1,23 @@
+import { NextResponse } from "next/server";
+
+// モックデータを使用（比較ページ用）
+const mockRevenue = [
+  { month: "Jan", revenue: 2000 },
+  { month: "Feb", revenue: 1800 },
+  { month: "Mar", revenue: 2200 },
+  { month: "Apr", revenue: 2500 },
+  { month: "May", revenue: 2300 },
+  { month: "Jun", revenue: 3200 },
+  { month: "Jul", revenue: 3500 },
+  { month: "Aug", revenue: 3700 },
+  { month: "Sep", revenue: 2500 },
+  { month: "Oct", revenue: 2800 },
+  { month: "Nov", revenue: 3000 },
+  { month: "Dec", revenue: 4800 },
+];
+
+export async function GET() {
+  // 意図的に遅延を追加
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return NextResponse.json(mockRevenue);
+}

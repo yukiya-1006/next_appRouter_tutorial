@@ -2,32 +2,35 @@ import { generateYAxis } from "@/app/lib/utils";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
 import { Revenue } from "@/app/lib/definitions";
-import { fetchRevenue } from "@/app/lib/data";
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
+// モックデータ（比較ページ用）
+const mockRevenue: Revenue[] = [
+  { month: "Jan", revenue: 2000 },
+  { month: "Feb", revenue: 1800 },
+  { month: "Mar", revenue: 2200 },
+  { month: "Apr", revenue: 2500 },
+  { month: "May", revenue: 2300 },
+  { month: "Jun", revenue: 3200 },
+  { month: "Jul", revenue: 3500 },
+  { month: "Aug", revenue: 3700 },
+  { month: "Sep", revenue: 2500 },
+  { month: "Oct", revenue: 2800 },
+  { month: "Nov", revenue: 3000 },
+  { month: "Dec", revenue: 4800 },
+];
 
-export default async function RevenueChart() {
-  // Make component async, remove the props
-  const revenue = await fetchRevenue(); // Fetch data inside the component
+export default async function RevenueChartMock() {
+  // 意図的に遅延を追加（ストリーミングを可視化）
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const chartHeight = 350;
-  const { yAxisLabels, topLabel } = generateYAxis(revenue);
-
-  if (!revenue || revenue.length === 0) {
-    return <p className="mt-4 text-gray-400">No data available.</p>;
-  }
+  const { yAxisLabels, topLabel } = generateYAxis(mockRevenue);
 
   return (
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Recent Revenue
       </h2>
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
       <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
           <div
@@ -39,7 +42,7 @@ export default async function RevenueChart() {
             ))}
           </div>
 
-          {revenue.map((month) => (
+          {mockRevenue.map((month) => (
             <div key={month.month} className="flex flex-col items-center gap-2">
               <div
                 className="w-full rounded-md bg-blue-300"

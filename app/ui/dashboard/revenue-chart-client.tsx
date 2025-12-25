@@ -1,18 +1,28 @@
+"use client";
+
 import { generateYAxis } from "@/app/lib/utils";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
 import { Revenue } from "@/app/lib/definitions";
-import { fetchRevenue } from "@/app/lib/data";
+import { useEffect, useState } from "react";
+import { RevenueChartSkeleton } from "@/app/ui/skeletons";
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
+export default function RevenueChartClient() {
+  const [revenue, setRevenue] = useState<Revenue[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function RevenueChart() {
-  // Make component async, remove the props
-  const revenue = await fetchRevenue(); // Fetch data inside the component
+  useEffect(() => {
+    fetch("/api/revenue")
+      .then((res) => res.json())
+      .then((data) => {
+        setRevenue(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <RevenueChartSkeleton />;
+  }
 
   const chartHeight = 350;
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
@@ -26,8 +36,6 @@ export default async function RevenueChart() {
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Recent Revenue
       </h2>
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
       <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
           <div
